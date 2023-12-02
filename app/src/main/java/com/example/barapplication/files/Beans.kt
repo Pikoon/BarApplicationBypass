@@ -10,4 +10,5 @@ data class DataBarBean(var name: String?,
                        var numero: Int?,
                        var lib_off : String?,
                        var id_secteur_postal : Int,
+                       var eq_ville : String,
                        var eq_site_web : String? )
