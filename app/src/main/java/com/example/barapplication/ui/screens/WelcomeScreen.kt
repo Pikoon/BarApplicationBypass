@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -41,8 +42,6 @@ fun WelcomeScreenPreview() {
 fun WelcomeScreen(modifier: Modifier = Modifier,
                   viewModel: MainViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
-    // StrictMode // To be deleted allows to force request thread
-    //   .setThreadPolicy(StrictMode.ThreadPolicy.Builder().detectAll().penaltyLog().build())
     Column(modifier) {
         Image( painter= painterResource(R.drawable.cheers),
             contentDescription = "Fiesta",
@@ -51,34 +50,32 @@ fun WelcomeScreen(modifier: Modifier = Modifier,
                 .fillMaxWidth()
                 .weight(0.5F)
         )
+        Spacer(Modifier.size(8.dp))
         Text(
             text = "Liste des cafés concerts de Toulouse",
             textAlign = TextAlign.Center,
             modifier = modifier
                 .fillMaxWidth()
         )
+        Spacer(Modifier.size(8.dp))
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.weight(1f)
         ) {
-            if(!viewModel.listBar.isNullOrEmpty()) {
-                items(viewModel.listBar.size) {
-                    Text(
-                        text = viewModel.listBar[it]?.eq_nom_equipement
-                            ?: "Je ne sais pas pourquoi il affiche cette ligne",
-                        textAlign = TextAlign.Center,
-                        modifier = modifier
-                            .fillMaxWidth().weight(0.5F)
-                            .clickable {
-                                viewModel.listBar[it]?.eq_telephone
-                                    ?: "Je ne sais pas pourquoi il affiche cette ligne"
-                            }
-
-                    )
-                }
+            items(viewModel.listBar.size) {
+                Text(
+                    text = viewModel.listBar[it].eq_nom_equipement,
+                    textAlign = TextAlign.Center,
+                    modifier = modifier
+                        .fillMaxWidth().weight(1.5F)
+                        .clickable {
+                            viewModel.listBar[it].eq_telephone
+                        }
+                )
+          //      Spacer(Modifier.size(5.dp))
             }
         }
-
+        Spacer(Modifier.size(8.dp))
         Button(
             onClick = {
                 viewModel.loadDataVM()

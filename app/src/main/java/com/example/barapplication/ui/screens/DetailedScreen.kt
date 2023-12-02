@@ -1,6 +1,5 @@
 package com.example.barapplication.ui.screens
 
-import android.os.StrictMode
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,7 +18,7 @@ import com.example.barapplication.ui.theme.BarApplicationTheme
 
 @Preview
 @Composable
-fun previewDetailedScreen() {
+fun PreviewDetailedScreen() {
     BarApplicationTheme {
         Surface(modifier = Modifier.fillMaxWidth(), color = Color.LightGray) {
             DetailedScreen(position = 1)
@@ -29,10 +28,9 @@ fun previewDetailedScreen() {
 
 @Composable
 fun DetailedScreen (position : Int,
-                   modifier : Modifier = Modifier,
-                   viewModel: MainViewModel = androidx.lifecycle.viewmodel.compose.viewModel()){
-    testPurposes()//to be deleted
-    var barSel : DataBarBean? = viewModel.listBar.get(position)
+                    modifier : Modifier = Modifier,
+                    viewModel: MainViewModel = androidx.lifecycle.viewmodel.compose.viewModel()){
+    val barSel : DataBarBean? = viewModel.listBar[position]
 
     Column(verticalArrangement = Arrangement.spacedBy(8.dp),) {
         Row (modifier.weight(1F)){
@@ -40,37 +38,37 @@ fun DetailedScreen (position : Int,
                 text = "Nom : ",
                 //textAlign = TextAlign.Center,
                 //modifier = modifier
-                 //   .fillMaxWidth()
+                //   .fillMaxWidth()
             )
             Text(
                 text = barSel?.eq_nom_equipement ?: "Inconnu",
                 //textAlign = TextAlign.Center,
                 //modifier = modifier
-                  //  .fillMaxWidth()
+                //  .fillMaxWidth()
             )
         }
         Row (modifier.weight(1F)){
             Text(
                 text = "Téléphone : ",
                 //textAlign = TextAlign.Center,
-              //modifier.weight(1F)
+                //modifier.weight(1F)
                 //    .fillMaxWidth()
             )
             Text(
                 text = barSel?.eq_telephone ?: "Inconnu",
-              /*  textAlign = TextAlign.Center,
-                modifier = modifier
-                    .fillMaxWidth()
-            */)
+                /*  textAlign = TextAlign.Center,
+                  modifier = modifier
+                      .fillMaxWidth()
+              */)
         }
         Row (modifier.weight(1F)){
-            androidx.compose.material3.Text(
+            Text(
                 text = "Adresse : ",
                 //textAlign = TextAlign.Center,
                 //modifier.weight(1F)
                 //    .fillMaxWidth()
             )
-            androidx.compose.material3.Text(
+            Text(
                 text = barSel?.let { adresse(it) } ?: "Adresse inconnue"
                 /*  textAlign = TextAlign.Center,
                   modifier = modifier
@@ -79,13 +77,13 @@ fun DetailedScreen (position : Int,
             )
         }
         Row (modifier.weight(1F)){
-            androidx.compose.material3.Text(
+            Text(
                 text = "Site web : ",
                 //textAlign = TextAlign.Center,
                 //modifier.weight(1F)
                 //    .fillMaxWidth()
             )
-            androidx.compose.material3.Text(
+            Text(
                 text = barSel?.eq_telephone ?: "Inconnu",
                 /*  textAlign = TextAlign.Center,
                   modifier = modifier
@@ -98,15 +96,7 @@ fun DetailedScreen (position : Int,
 
 // returns the adresse in one string
 fun adresse (bar : DataBarBean) : String = StringBuilder()
-    ?.append(bar?.numero.toString() ?: "")?.append(" ")
+    .append(bar?.numero.toString() ?: "")?.append(" ")
     ?.appendLine(bar?.lib_off ?: "")
     ?.appendLine(bar?.id_secteur_postal.toString() ?: "")
     ?.appendLine(bar?.eq_ville?: "").toString()
-
-
-@Composable
-fun testPurposes(viewModel: MainViewModel = androidx.lifecycle.viewmodel.compose.viewModel()){
-    StrictMode // To be deleted allows to force request thread
-        .setThreadPolicy(StrictMode.ThreadPolicy.Builder().detectAll().penaltyLog().build())
-    viewModel.loadDataVM()
-}

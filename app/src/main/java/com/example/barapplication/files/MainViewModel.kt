@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 
 class MainViewModel : ViewModel() {
-    var listBar = mutableStateListOf<DataBarBean?>(null)
+    var listBar = mutableStateListOf<DataBarBean>()
         private set
 
     //Traitement en cours
@@ -25,9 +25,9 @@ class MainViewModel : ViewModel() {
         error = ""
         viewModelScope.launch(Dispatchers.Default) {
             try {
-                var data: ResultsBean? =  BarAPI.loadData()
+                val data: ResultsBean? =  BarAPI.loadData()
                 if (data != null)
-                    listBar.addAll(data!!.results)
+                    listBar.addAll(data.results)
             }catch (e:Exception){
                 e.printStackTrace()
                 error=e.message ?: "Erreur"
@@ -35,12 +35,4 @@ class MainViewModel : ViewModel() {
         }
         runInProgress=false
     }
-}
-
-
-fun main() {
-    var viewModel = MainViewModel()
-    viewModel.loadDataVM()
-    println(viewModel.listBar.get(1)?.eq_nom_equipement)
-    println(viewModel.listBar.get(2)?.eq_nom_equipement)
 }
