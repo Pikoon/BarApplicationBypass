@@ -1,7 +1,9 @@
 package com.example.barapplication.ui.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,16 +13,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -57,40 +61,49 @@ fun DetailedScreen(
         viewModel.loadDataVM()
     }
 
-    var barSel: DataBarBean? = viewModel.listBar.getOrNull(position)
+    val barSel: DataBarBean? = viewModel.listBar.getOrNull(position)
 
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+            .background(color = Color.DarkGray) // Set your preferred background color
     ) {
-        IconButton(
-            onClick = { navHostController?.popBackStack() },
+        // Header Image and Back Button
+        Box(
             modifier = Modifier
-                .align(Alignment.Start)
+                .fillMaxWidth()
+                .height(200.dp) // Set your preferred image height
+                .clip(shape = RoundedCornerShape(8.dp)) // Add rounded corners to the image
         ) {
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = "Back",
-                tint = Color.Black,
-                modifier = Modifier
-                    .padding(4.dp)
-                    .size(24.dp)
+            Image(
+                painter = painterResource(R.drawable.dark),
+                contentDescription = "Cafe",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
             )
+            IconButton(
+                onClick = { navHostController?.popBackStack() },
+                modifier = Modifier
+                    .padding(16.dp)
+                    .clip(CircleShape)
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.ArrowBack,
+                    contentDescription = "Back",
+                    tint = Color.White,
+                    modifier = Modifier.size(24.dp)
+                        .background(Color.Black.copy(alpha = 0.5f))
+                )
+            }
         }
-        Image( painter= painterResource(R.drawable.dark),
-            contentDescription = "Fiesta",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .weight(0.5F)
-        )
+
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Display Information
         Info("Nom", barSel?.eq_nom_equipement ?: "Inconnu")
         Info("Téléphone", barSel?.eq_telephone ?: "Inconnu")
         Info("Adresse", barSel?.let { adresse(it) } ?: "Adresse inconnue")
-        Info("Site web", barSel?.eq_telephone ?: "Inconnu")
+        Info("Site web", barSel?.eq_site_web ?: "Inconnu")
     }
 }
 
@@ -105,15 +118,17 @@ fun Info(label: String, value: Any) {
         Text(
             text = label,
             fontWeight = FontWeight.Bold,
-            color = Color.Gray,
+            color = Color.White, // Set your preferred text color
             fontSize = 16.sp,
             modifier = Modifier.weight(1f)
         )
 
         Spacer(modifier = Modifier.width(16.dp))
+
         Text(
             text = value.toString(),
             fontSize = 16.sp,
+            color = Color.White, // Set your preferred text color
             modifier = Modifier.weight(2f)
         )
     }
@@ -121,7 +136,7 @@ fun Info(label: String, value: Any) {
 
 // returns the adresse in one string
 fun adresse (bar : DataBarBean) : String = StringBuilder()
-    ?.append(bar?.numero.toString() ?: "")?.append(" ")
-    ?.appendLine(bar?.lib_off ?: "")
-    ?.appendLine(bar?.id_secteur_postal.toString() ?: "")
-    ?.appendLine(bar?.eq_ville?: "").toString()
+    .append(bar?.numero ?: "").append(" ")
+    .appendLine(bar?.lib_off ?: "")
+    .appendLine(bar?.id_secteur_postal ?: "")
+    .appendLine(bar?.eq_ville ?: "").toString()
