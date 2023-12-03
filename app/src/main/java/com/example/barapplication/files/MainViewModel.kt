@@ -25,14 +25,15 @@ class MainViewModel : ViewModel() {
         error = ""
         viewModelScope.launch(Dispatchers.Default) {
             try {
-                val data: ResultsBean? =  BarAPI.loadData()
+                val data: ResultsBean? = BarAPI.loadData()
                 if (data != null)
                     listBar.addAll(data.results)
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
-                error=e.message ?: "Erreur"
+                error = e.message ?: "Erreur"
             }
+            // }
+            runInProgress = false
         }
-        runInProgress=false
     }
 }

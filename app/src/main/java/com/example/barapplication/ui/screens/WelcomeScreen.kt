@@ -24,8 +24,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.example.barapplication.R
 import com.example.barapplication.files.MainViewModel
+import com.example.barapplication.ui.Routes
 import com.example.barapplication.ui.theme.BarApplicationTheme
 
 @Preview (showBackground= true)
@@ -37,10 +40,11 @@ fun WelcomeScreenPreview() {
         }
     }
 }
-
 @Composable
-fun WelcomeScreen(modifier: Modifier = Modifier,
-                  viewModel: MainViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+fun WelcomeScreen(
+    modifier: Modifier = Modifier,
+    viewModel: MainViewModel = viewModel(),
+    navHostController: NavHostController ?= null
 ) {
     Column(modifier) {
         Image( painter= painterResource(R.drawable.cheers),
@@ -68,9 +72,9 @@ fun WelcomeScreen(modifier: Modifier = Modifier,
                     textAlign = TextAlign.Center,
                     modifier = modifier
                         .fillMaxWidth().weight(1.5F)
-                        .clickable {
-                            viewModel.listBar[it].eq_telephone
-                        }
+                        .clickable (onClick = {
+                            navHostController?.navigate(Routes.detailedScreen.addParam(it))
+                        })
                 )
           //      Spacer(Modifier.size(5.dp))
             }
